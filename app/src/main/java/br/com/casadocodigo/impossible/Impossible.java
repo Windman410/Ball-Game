@@ -16,27 +16,7 @@ public class Impossible extends SurfaceView implements Runnable {
 
     SurfaceHolder holder; //verifica se a superficie esta pronta para ser desenhada
     Paint paint; // classe para desenhar elementos na tela
-
-    private int playerY = 300;
-
-    public int getPlayerY() {
-        return playerY;
-    }
-
-    public void setPlayerY(int playerY) {
-        this.playerY = playerY;
-    }
-
-    public int getPlayerX() {
-        return playerX;
-    }
-
-    public void setPlayerX(int playerX) {
-        this.playerX = playerX;
-    }
-
-    private int playerX = 300;
-
+    Player jogador = new Player();
     public Impossible(Context context) {
         super(context);
         paint = new Paint();
@@ -51,24 +31,24 @@ public class Impossible extends SurfaceView implements Runnable {
     // metodo para desenhar o player
     private void drawPlayer(Canvas canvas){
         paint.setColor(Color.CYAN);
-        canvas.drawCircle(playerX,playerY,50,paint);
+        canvas.drawCircle(jogador.getCoordX(),jogador.getCoordY(),jogador.getRadius(),paint);
     }
 
-    public void moveDown(int pixels){
-        playerY += pixels;
-    }
+    public void moveDown(int pixels){ jogador.moveDown(pixels); }
 
     public void moveUp(int pixels){
-        playerY -= pixels;
+        jogador.moveUp(pixels);
     }
 
     public void moveRight(int pixels){
-        playerX += pixels;
+        jogador.moveRight(pixels);
     }
 
     public void moveLeft(int pixels){
-        playerX -= pixels;
+        jogador.moveLeft(pixels);
     }
+
+    public int getMov(){ return jogador.getMov(); }
 
     public void run(){
         while (running){
