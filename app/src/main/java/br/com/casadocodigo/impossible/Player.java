@@ -19,10 +19,17 @@ public class Player {
         SOUTHEAST;
     }
 
+    private float ScreenMaxX;
+    private float ScreenMaxY;
     private int coordY = 300; // coordenada X do jogador
     private int coordX = 300; // coordenada Y do jogador
     private int radius = 50; // radio do circulo que o jogador ocupa
     private int mov = 10; // quantidade de pixels que o jogador se move
+
+    public Player(float screenMaxX, float screenMaxY) {
+        ScreenMaxX = screenMaxX;
+        ScreenMaxY = screenMaxY;
+    }
 
     public int getCoordY() {
         return coordY;
@@ -44,6 +51,16 @@ public class Player {
     public int getMov() { return mov; }
     public void setMov(int mov) { this.mov = mov; }
 
+    public float getScreenMaxX() { return ScreenMaxX; }
+    public void setScreenMaxX(float screenMaxX) { ScreenMaxX = screenMaxX; }
+
+    public float getScreenMaxY() {
+        return ScreenMaxY;
+    }
+
+    public void setScreenMaxY(float screenMaxY) {
+        ScreenMaxY = screenMaxY;
+    }
 
     public void moveDown(int pixels){ coordY += pixels; }
 
@@ -60,7 +77,9 @@ public class Player {
     }
 
     public Direction getDirection(float positionX, float positionY){
-        if(positionX < this.getCoordX()-radius && (positionY > this.getCoordY()-radius && positionY < this.getCoordY()+radius))
+        //if(this.getCoordX()-radius > ScreenMaxX || this.getCoordY()-radius > ScreenMaxY || this.getCoordX()+50 < 0 || this.getCoordY()+50 < 0)
+        //    return Direction.STAY;
+        /*else*/ if(positionX < this.getCoordX()-radius && (positionY > this.getCoordY()-radius && positionY < this.getCoordY()+radius))
             return Direction.LEFT;
         else if(positionX > this.getCoordX()+radius && (positionY > this.getCoordY()-radius && positionY < this.getCoordY()+radius))
             return Direction.RIGHT;
