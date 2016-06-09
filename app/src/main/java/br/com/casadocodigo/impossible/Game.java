@@ -1,7 +1,9 @@
 package br.com.casadocodigo.impossible;
 
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -14,9 +16,14 @@ public class Game extends AppCompatActivity implements View.OnTouchListener {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);//metodo para deixar a tela cheia
-        view = new Impossible(this);
+
+        view = new Impossible(this,
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
         view.setOnTouchListener(this);
         setContentView(view);
+
+
     }
 
     protected void onResume(){

@@ -1,5 +1,6 @@
 package br.com.casadocodigo.impossible;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,18 +16,29 @@ public class Impossible extends SurfaceView implements Runnable {
     boolean running = false; //variavel para definir quando o jogo esta rodando
     Thread renderThread = null; // thread que vai renderizar a tela
 
-    DisplayMetrics metrics = new DisplayMetrics();
-
+    float screenWidth;
+    float screenHeight;
     SurfaceHolder holder; //verifica se a superficie esta pronta para ser desenhada
     Paint paint; // classe para desenhar elementos na tela
 
-    Player jogador = new Player(metrics.widthPixels,metrics.heightPixels );
-    Enemy inimigo = new Enemy(metrics.widthPixels,metrics.heightPixels );
+    Player jogador;
+    Enemy inimigo;
+    int score;
 
     public Impossible(Context context) {
         super(context);
         paint = new Paint();
         holder = getHolder();
+    }
+
+    public Impossible(Context context, float width, float height) {
+        super(context);
+        paint = new Paint();
+        holder = getHolder();
+        screenWidth = width;
+        screenHeight = height;
+        jogador = new Player(screenWidth,screenHeight );
+        inimigo = new Enemy(screenWidth,screenHeight );
     }
     // metodo para iniciar o jogo
     public void resume(){
@@ -40,10 +52,10 @@ public class Impossible extends SurfaceView implements Runnable {
         canvas.drawCircle(jogador.getCoordX(),jogador.getCoordY(),jogador.getRadius(),paint);
     }
 
-    // metodo para desenhar o player
+    // metodo para desenhar o inimigo
     private void drawEnemy(Canvas canvas){
         paint.setColor(Color.GREEN);
-        inimigo.crescer();
+        inimigo.diminuir();
         canvas.drawCircle(inimigo.getCoordX(),inimigo.getCoordY(),inimigo.getRadius(),paint);
     }
 
@@ -63,6 +75,24 @@ public class Impossible extends SurfaceView implements Runnable {
 
     public int getMov(){ return jogador.getMov(); }
 
+    public void detectarColisao(){
+        double distancia = Math.pow(jogador.getCoordX() - inimigo.getCoordX(),2) +
+                          Math.pow(jogador.getCoordY() - inimigo.getCoordY(), 2);
+        distancia = Math.sqrt(distancia);
+        // verifica distancia entre os raios
+        if (distancia <= jogador.getRadius() + inimigo.getRadius()) {
+            inimigo.setVivo(false);
+            this.score += inimigo.getRadius();
+        }
+    }
+
+    public void fimDeJogo(Canvas canvas){
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.CYAN);
+        paint.setTextSize(100);
+        canvas.drawText("GAME OVER!\nSua pontuação é: " + this.score,50,150,paint);
+    }
+
     public void run(){
         while (running){
             //verifica se a tela esta pronta para ser desenhada
@@ -74,8 +104,17 @@ public class Impossible extends SurfaceView implements Runnable {
             canvas.drawColor(Color.BLACK);
 
             //desenha o player
+            if(!inimigo.isVivo())
+                inimigo.gerarPosicao();
             this.drawPlayer(canvas);
             this.drawEnemy(canvas);
+
+            this.detectarColisao();
+
+            /*if(inimigo.isExplodiu()){
+               fimDeJogo(canvas);
+               break;
+            }*/
 
             //atualiza e libera o canvas, depois pinta a tela de preto
             holder.unlockCanvasAndPost(canvas);

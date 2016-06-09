@@ -2,6 +2,8 @@ package br.com.casadocodigo.impossible;
 
 import android.view.MotionEvent;
 
+import java.util.Random;
+
 /**
  * Created by Gabriel on 01/06/2016.
  */
@@ -21,24 +23,26 @@ public class Player {
 
     private float ScreenMaxX;
     private float ScreenMaxY;
-    private int coordY = 300; // coordenada X do jogador
-    private int coordX = 300; // coordenada Y do jogador
+    private float coordY = 300; // coordenada X do jogador
+    private float coordX = 300; // coordenada Y do jogador
     private int radius = 50; // radio do circulo que o jogador ocupa
     private int mov = 10; // quantidade de pixels que o jogador se move
 
     public Player(float screenMaxX, float screenMaxY) {
         ScreenMaxX = screenMaxX;
         ScreenMaxY = screenMaxY;
+        coordX = ScreenMaxX/2;
+        coordY = ScreenMaxY/2;
     }
 
-    public int getCoordY() {
+    public float getCoordY() {
         return coordY;
     }
     public void setCoordY(int coordY) {
         this.coordY = coordY;
     }
 
-    public int getCoordX() {
+    public float getCoordX() {
         return coordX;
     }
     public void setCoordX(int coordX) {

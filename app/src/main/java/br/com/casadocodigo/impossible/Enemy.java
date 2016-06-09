@@ -7,11 +7,13 @@ import java.util.Random;
  */
 public class Enemy {
     Random random = new Random();
-    private int radius = 10;
+    private boolean vivo = false;
+    private boolean explodiu = false;
+    private int radius = 100;
     private float ScreenMaxX;
     private float ScreenMaxY;
-    private float coordX = 0;
-    private float coordY = 0;
+    private float coordX = 500;
+    private float coordY = 500;
 
     public Enemy(float screenMaxX, float screenMaxY) {
         ScreenMaxX = screenMaxX;
@@ -21,7 +23,6 @@ public class Enemy {
     public int getRadius() {
         return radius;
     }
-
     public void setRadius(int radius) {
         this.radius = radius;
     }
@@ -29,7 +30,6 @@ public class Enemy {
     public float getCoordX() {
         return coordX;
     }
-
     public void setCoordX(int coordX) {
         this.coordX = coordX;
     }
@@ -37,7 +37,6 @@ public class Enemy {
     public float getCoordY() {
         return coordY;
     }
-
     public void setCoordY(int coordY) {
         this.coordY = coordY;
     }
@@ -45,7 +44,6 @@ public class Enemy {
     public float getScreenMaxX() {
         return ScreenMaxX;
     }
-
     public void setScreenMaxX(Float screenMaxX) {
         ScreenMaxX = screenMaxX;
     }
@@ -53,18 +51,29 @@ public class Enemy {
     public float getScreenMaxY() {
         return ScreenMaxY;
     }
-
     public void setScreenMaxY(Float screenMaxY) {
         ScreenMaxY = screenMaxY;
     }
 
+    public boolean isVivo() { return vivo;}
+    public void setVivo(boolean vivo) { this.vivo = vivo;}
+
+    public boolean isExplodiu() { return explodiu;}
+    public void setExplodiu(boolean explodiu) { this.explodiu = explodiu;}
+
     public void gerarPosicao(){
+        this.vivo = true;
+        this.radius = 100;
         Random random = new Random();
-        coordX = random.nextFloat()%ScreenMaxX;
-        coordY = random.nextFloat()%ScreenMaxY;
+        coordX = (random.nextFloat()*(ScreenMaxX - radius*2));
+        coordY = (random.nextFloat()*(ScreenMaxY - radius*2));
     }
 
-    public void crescer(){
-        this.radius++;
+    public void diminuir(){
+        if(this.radius > 0) {
+            this.radius--;
+        } else
+            //this.explodiu = true;
+        this.vivo = false;
     }
 }
