@@ -38,14 +38,14 @@ public class Player {
     public float getCoordY() {
         return coordY;
     }
-    public void setCoordY(int coordY) {
+    public void setCoordY(float coordY) {
         this.coordY = coordY;
     }
 
     public float getCoordX() {
         return coordX;
     }
-    public void setCoordX(int coordX) {
+    public void setCoordX(float coordX) {
         this.coordX = coordX;
     }
 

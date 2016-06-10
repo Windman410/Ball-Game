@@ -10,6 +10,7 @@ public class Enemy {
     private boolean vivo = false;
     private boolean explodiu = false;
     private int radius = 100;
+    private int pontuacao = 0;
     private float ScreenMaxX;
     private float ScreenMaxY;
     private float coordX = 500;
@@ -61,8 +62,12 @@ public class Enemy {
     public boolean isExplodiu() { return explodiu;}
     public void setExplodiu(boolean explodiu) { this.explodiu = explodiu;}
 
+    public int getPontuacao() { return pontuacao;}
+    public void setPontuacao(int pontuacao) { this.pontuacao = pontuacao;}
+
     public void gerarPosicao(){
         this.vivo = true;
+        this.pontuacao = 0;
         this.radius = 100;
         Random random = new Random();
         coordX = (random.nextFloat()*(ScreenMaxX - radius*2));
@@ -72,8 +77,13 @@ public class Enemy {
     public void diminuir(){
         if(this.radius > 0) {
             this.radius--;
+            gerarPontuacao();
         } else
-            //this.explodiu = true;
-        this.vivo = false;
+            this.explodiu = true;
+            //this.vivo = false;
+    }
+
+    public void gerarPontuacao(){
+        this.pontuacao++;
     }
 }
