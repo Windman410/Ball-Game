@@ -50,9 +50,13 @@ public class Impossible extends SurfaceView implements Runnable {
     public void inicializar(){
         jogador.setCoordX(screenWidth/2);
         jogador.setCoordY(screenHeight/2);
+        jogador.setVivo(true);
+        jogador.setRadius(50);
+        jogador.setMov(10);
+        jogador.setVidas(3);
         inimigo.gerarPosicao();
         inimigo.setExplodiu(false);
-        
+
         this.score = 0;
     }
     // metodo para desenhar o player
@@ -121,6 +125,9 @@ public class Impossible extends SurfaceView implements Runnable {
     }
 
     public void fimDeJogo(Canvas canvas){
+        jogador.setVivo(false);
+        jogador.setRadius(0);
+        jogador.setMov(0);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.CYAN);
         paint.setTextSize(50);
@@ -138,10 +145,19 @@ public class Impossible extends SurfaceView implements Runnable {
         paint.setColor(Color.CYAN);
         paint.setTextSize(50);
         canvas.drawText("Score:\n" + String.valueOf(score), 0, 50, paint);
+
+        paint.setColor(Color.RED);
+        if(jogador.getVidas() >= 1)
+            canvas.drawCircle(20,100,20,paint);
+        if(jogador.getVidas() > 1)
+            canvas.drawCircle(70,100,20,paint);
+        if(jogador.getVidas() > 2)
+            canvas.drawCircle(120,100,20,paint);
     }
 
 
     public void run(){
+        inicializar();
         while (running){
             //verifica se a tela esta pronta para ser desenhada
             if(!holder.getSurface().isValid()){
@@ -155,20 +171,26 @@ public class Impossible extends SurfaceView implements Runnable {
             if(!inimigo.isVivo())
             do{
                 inimigo.gerarPosicao();
-            }while (this.detectarColisao());
+            }while(this.detectarColisao());
             this.drawPlayer(canvas);
             this.drawEnemy(canvas);
             this.drawButtons(canvas);
 
             if(this.detectarColisao())
-                this.matarInimigo();
+                if(jogador.isVivo())
+                    this.matarInimigo();
+
+            if(jogador.isVivo())
+                this.desenharPontuacao(canvas);
 
             if(inimigo.isExplodiu()){
-               fimDeJogo(canvas);
-                //break;
+                jogador.perderVida();
             }
 
-            this.desenharPontuacao(canvas);
+            if(jogador.getVidas() == 0){
+                fimDeJogo(canvas);
+                //break;
+            }
 
             //atualiza e libera o canvas, depois pinta a tela de preto
             holder.unlockCanvasAndPost(canvas);
